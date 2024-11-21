@@ -1,0 +1,7 @@
+
+.truncate-column {
+    max-width: 200px; /* Ancho máximo para la columna */
+    overflow: hidden; /* Ocultar contenido desbordado */
+    text-overflow: ellipsis; /* Mostrar puntos suspensivos */
+    white-space: nowrap; /* Evitar el salto de línea */
+}
