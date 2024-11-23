@@ -2,29 +2,13 @@
 
 const url = "https://6733aeb0a042ab85d117a8d6.mockapi.io/api/v1/series";
 
-window.addEventListener('DOMContentLoaded', async () => {
-
-    try {
-        const data = await getWithFetch();
-        showSerieInTables(data);
-    } catch (err) {
-        console.error(err);
-    }
-
-    /*
-    data.then( response => {
-        showSerieInTables(response);
-    }).catch(err => {
-        console.error(err);
-    })
-    */
-
-});
+window.addEventListener('DOMContentLoaded', () => showSerieInTables());
 
 const formCreate = document.getElementById('formCreate');
+const formEdit = document.getElementById('formEdit');
 
 formCreate.addEventListener('submit', createSerie);
-
+formEdit.addEventListener('submit', editSerie);
 
 function createSerie(evento) {
 
@@ -52,7 +36,46 @@ function createSerie(evento) {
     postWithFetch(serie);
 }
 
-function showSerieInTables(data) {
+function editSerie(evento) {
+
+    evento.preventDefault();
+
+    const formData = new FormData(formEdit);
+
+    //separa por ',' y devuelve un array
+    const generos = formData.get('genero').split(',')
+        .map(genero => genero.trim()); //elimina los espacios vacios
+
+    const idSerie = formData.get('idSerie');
+
+    //Esquema de 'serie'
+    const serie = {
+        titulo: formData.get('titulo'),
+        creador: formData.get('creador'),
+        generos: generos,
+        cantidadTemporadas: formData.get('temporadas'),
+        edadRecomendada: formData.get('edadRecomendada'),
+        fechaLanzamiento: formData.get('fechaLanzamiento'),
+        sinopsis: formData.get('sinopsis')
+    }
+
+    formEdit.reset();
+
+    console.log(idSerie);
+
+    editWithFetch( idSerie, serie );
+
+}
+
+async function showSerieInTables() {
+
+    let data;
+
+    try {
+        data = await getWithFetch();
+    } catch (err) {
+        console.error(err);
+    }
 
     const tbobySeries = document.getElementById('tbodySeries');
 
@@ -65,13 +88,13 @@ function showSerieInTables(data) {
             <th scope="row">${ serie.idSeries }</th>
             <td>${ serie.titulo }</td>
             <td>${ serie.creador }</td>
-            <td>${ serie.generos }</td>
+            <td class="truncate-column">${ serie.generos }</td>
             <td>${ serie.cantidadTemporadas }</td>
             <td>${ serie.edadRecomendada }</td>
             <td>${ serie.fechaLanzamiento }</td>
             <td class="truncate-column">${ serie.sinopsis }</td>
             <td>
-                <button  id="${serie.idSeries}" class="btn btn-edit btn-warning"> 
+                <button  id="${serie.idSeries}" class="btn btn-edit btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditSerie"> 
                     <i class="bi bi-pencil"></i>
                 </button>
             </td>
@@ -86,6 +109,27 @@ function showSerieInTables(data) {
     addButtonEvents();
 }
 
+async function loadInputsFormEdit(idSerie) {
+
+    let serie;
+
+    try {
+        serie = await getByIdWithFetch(idSerie);
+    } catch(err) {
+        console.error(err);
+    }
+
+    formEdit.elements['idSerie'].value = serie.idSeries;
+    formEdit.elements['titulo'].value = serie.titulo;
+    formEdit.elements['creador'].value = serie.creador;
+    formEdit.elements['genero'].value = serie.generos;
+    formEdit.elements['temporadas'].value = serie.cantidadTemporadas;
+    formEdit.elements['edadRecomendada'].value = serie.edadRecomendada;
+    formEdit.elements['fechaLanzamiento'].value = serie.fechaLanzamiento;
+    formEdit.elements['sinopsis'].value = serie.sinopsis;
+
+}
+
 function addButtonEvents() {
 
     const editButtons = document.querySelectorAll('#tbodySeries .btn-edit');
@@ -94,7 +138,7 @@ function addButtonEvents() {
     for (const button of editButtons) {
         button.addEventListener('click', () => {
             const idSerie = button.id;
-            //TODO editar serie.
+            loadInputsFormEdit(idSerie);
         });
     }
 
@@ -111,23 +155,21 @@ function addButtonEvents() {
 
 function postWithFetch(serie) {
 
-    const opciones = {
+    fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(serie)
-    }
-
-    fetch(url, opciones)
-        .then(response => {
-            if (response.ok) {
-                console.log("Serie creada con exito");
-            }
-        })
-        .catch(err => {
-            console.error(err);
-        });
+    }).then(response => {
+        if (response.ok) {
+            console.log("Serie creada con exito");
+            showSerieInTables();
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    });
 }
 
 async function getWithFetch() {
@@ -155,9 +197,47 @@ function deleteWithFetch( idSerie ) {
     .then( response => {
         if(response.ok) {
             console.log("Eliminado con exito");
+            showSerieInTables();
         }
     })
     .catch( err => {
         console.error(err);
     });
+}
+
+async function getByIdWithFetch( idSerie ) {
+
+    return fetch(url + "/" + idSerie)
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+    })
+    .then(data => {
+        return data;
+    })
+    .catch(err => {
+        console.error(err);
+    });
+
+}
+
+function editWithFetch(idSerie, serie) {
+
+    fetch(url + "/" + idSerie, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(serie)
+    }).then(response => {
+        if (response.ok) {
+            console.log("Serie editada con exito");
+            showSerieInTables();
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    });
+
 }
