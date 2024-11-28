@@ -5,3 +5,11 @@
     text-overflow: ellipsis; /* Mostrar puntos suspensivos */
     white-space: nowrap; /* Evitar el salto de línea */
 }
+
+table thead tr {
+    text-align: center;
+}
+
+tbody th:hover, tbody td:hover {
+    cursor: pointer;
+}

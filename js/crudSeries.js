@@ -96,14 +96,14 @@ async function showSerieInTables() {
     for (const serie of data) {
 
         tbobySeries.innerHTML +=
-         `<tr>
+         `<tr class="align-baseline">
             <th scope="row">${ serie.idSeries }</th>
             <td>${ serie.titulo }</td>
             <td>${ serie.creador }</td>
             <td class="truncate-column">${ serie.generos }</td>
-            <td>${ serie.cantidadTemporadas }</td>
-            <td>${ serie.edadRecomendada }</td>
-            <td>${ serie.fechaLanzamiento }</td>
+            <td class="text-center">${ serie.cantidadTemporadas }</td>
+            <td class="text-center">${ serie.edadRecomendada }</td>
+            <td class="text-center">${ serie.fechaLanzamiento }</td>
             <td class="truncate-column">${ serie.sinopsis }</td>
             <td>
                 <button  id="${serie.idSeries}" class="btn btn-edit btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditSerie"> 

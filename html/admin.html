@@ -18,7 +18,7 @@
         <!-- Boton nueva serie -->
         <div class="col-md-12">
             <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalCreateSerie">
-                <i class="bi bi-plus-circle fs-4"></i>
+                <i class="bi bi-plus-lg fs-5"></i>
             </button>
         </div>
 
@@ -90,25 +90,28 @@
         </div>
 
         <!-- Tabla de listado de series -->
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Titulo</th>
-                    <th scope="col">Creador</th>
-                    <th scope="col">Generos</th>
-                    <th scope="col">Cantidad de temporadas</th>
-                    <th scope="col">Edad recomendada</th>
-                    <th scope="col">Fecha de lanzamiento</th>
-                    <th scope="col">Sinopsis</th>
-                    <th scope="col">Editar</th>
-                    <th scope="col">Eliminar</th>
-                </tr>
-            </thead>
-            <tbody id="tbodySeries">
 
-            </tbody>
-        </table>
+        <div class="table-responsive my-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Titulo</th>
+                        <th scope="col">Creador</th>
+                        <th scope="col">Generos</th>
+                        <th scope="col">Temporadas</th>
+                        <th scope="col">Edad recomendada</th>
+                        <th scope="col">Fecha lanzamiento</th>
+                        <th scope="col">Sinopsis</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodySeries">
+    
+                </tbody>
+            </table>
+        </div>
 
         <!-- Modal Editar -->
         <div class="modal fade" id="modalEditSerie" tabindex="-1" data-bs-backdrop="static"
