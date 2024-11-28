@@ -34,6 +34,11 @@ function createSerie(evento) {
     formCreate.reset();
 
     postWithFetch(serie);
+
+    // Cerrar modal
+    let modalCreateSerie = document.getElementById('modalCreateSerie');
+    let instaciaModalCreate= bootstrap.Modal.getInstance(modalCreateSerie);
+    instaciaModalCreate.hide();
 }
 
 function editSerie(evento) {
@@ -64,6 +69,13 @@ function editSerie(evento) {
     console.log(idSerie);
 
     editWithFetch( idSerie, serie );
+
+    //Cerrar el modal
+    let modalEditSerie = document.getElementById('modalEditSerie');
+
+    let instaciaModalEdit = bootstrap.Modal.getInstance(modalEditSerie);
+
+    instaciaModalEdit.hide();
 
 }
 
@@ -107,6 +119,7 @@ async function showSerieInTables() {
     }
 
     addButtonEvents();
+    addRowEvents();
 }
 
 async function loadInputsFormEdit(idSerie) {
@@ -149,6 +162,24 @@ function addButtonEvents() {
         }, { once: true });
     }
 
+}
+
+function addRowEvents() {
+
+    const rowsTable = document.querySelectorAll('#tbodySeries tr');
+
+    for (const row of rowsTable) {
+        
+        row.addEventListener('click',(evento) => {
+
+            const idSerie = row.firstElementChild.textContent;
+
+            //Si el click no es en un botton, redirecciona.
+            if( !evento.target.closest('button')) {
+                window.location.href = `episodiosSerie.html?idSerie=${idSerie}`;
+            }
+        });
+    }
 }
 
 //----- operaciones fetch ------
