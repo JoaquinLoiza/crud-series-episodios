@@ -93,6 +93,10 @@ async function showSerieInTables() {
 
     tbobySeries.innerHTML = '';
 
+    if(!data) {
+        return;
+    }
+
     for (const serie of data) {
 
         tbobySeries.innerHTML +=
